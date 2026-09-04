@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="CET-N: bağlam, öğrenme ve beden arasındaki varsayımsal ilişkileri keşfetmek için çevrimdışı matematik laboratuvarı.">
+<title>Plasebo Ağ Laboratuvarı · CET-N</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="engine.js"></script>
+<script defer src="app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#main" aria-label="Plasebo Ağ Laboratuvarı ana içerik"><span class="brand-icon" aria-hidden="true">∿</span><span>PLASEBO AĞ<br><strong>LABORATUVARI</strong></span></a>
+  <div class="header-meta"><span class="status-dot"></span> ÇEVRİMDIŞI LABORATUVAR <span class="version">CET-N / 1.0</span></div>
+  <button id="guideButton" class="button quiet">Nasıl çalışır?</button>
+</header>
+
+<main id="main">
+  <section class="intro">
+    <div><p class="eyebrow">BAĞLAM → ÖĞRENME → DÜZENLEME → GÖZLEM</p>
+      <h1>Bir beklenti,<br><em>bir ağı nasıl değiştirir?</em></h1>
+      <p class="lede">Beklentiyi değiştirin, bir yolu kapatın, öğrenmeyi izleyin. Aynı sistemin nötr eşine göre farkını keşfedin.</p>
+    </div>
+    <aside class="model-note"><span class="note-symbol">i</span><div><strong>Bu bir kuram laboratuvarı.</strong><p>Parametreler örnektir; biyolojik olarak kalibre edilmemiştir. Sonuçlar hastalık tahmini veya tedavi önerisi değildir. Tüm değerler ve zaman boyutsuzdur.</p></div></aside>
+  </section>
+
+  <nav class="preset-strip" aria-label="Hazır deneyler">
+    <span class="strip-label">DENEY SEÇ</span>
+    <button class="preset active" data-preset="relief">01 <span>Olumlu beklenti</span></button>
+    <button class="preset" data-preset="threat">02 <span>Nocebo</span></button>
+    <button class="preset" data-preset="conditioning">03 <span>Yalnız öğrenme</span></button>
+    <button class="preset" data-preset="blockade">04 <span>Opioid yolu kapalı</span></button>
+    <button class="preset" data-preset="isolation">05 <span>Periferik yollar kapalı</span></button>
+    <button class="preset" data-preset="neutral">06 <span>Nötr</span></button>
+  </nav>
+
+  <div class="lab-layout">
+    <aside class="control-panel card">
+      <div class="section-heading"><div><p class="eyebrow">DENEY MASASI</p><h2>Sisteme dokunun</h2></div><span class="small-tag">01</span></div>
+      <div id="controls"></div>
+      <details class="advanced">
+        <summary>Ortak başlangıç ve öğrenme ayarları</summary>
+        <div id="advancedControls"></div>
+        <p class="micro">İlaç ve hastalık girdileri iki kolda aynıdır. İlaç girdisi burada yalnızca iki periferik eksene doğrudan girer; bir gerçek ilacın modeli değildir.</p>
+      </details>
+      <div class="counterfactual"><strong>Nötr eş / karşılaştırma</strong><p>E = 0, ℓ = 0. Ağ ayarları, ilaç, duyusal girdi, hastalık süreci ve başlangıç durumları seçili deneyle aynıdır.</p></div>
+      <p id="parameterNotice" class="micro">Bir ayarı değiştirmek yeni, eşleştirilmiş bir deney başlatır.</p>
+    </aside>
+
+    <section class="workspace" aria-label="Simülasyon ve çıktılar">
+      <article class="card network-card">
+        <div class="section-heading network-heading"><div><p class="eyebrow">CANLI SİSTEM</p><h2>Yedi düğüm, farklı yollar</h2></div>
+          <div class="simulation-status"><span id="runDot" class="status-dot"></span><span id="runStatus">Hazır</span></div>
+        </div>
+        <div class="graph-meta"><span>İşlevsel şema · anatomi değildir</span><span id="boundValue">‖K‖∞ &lt; 1</span></div>
+        <div id="network" class="network" aria-label="İşlevsel ağ grafiği"></div>
+        <div class="network-legend"><span><i class="legend-dot teal"></i>Negatif sapma</span><span><i class="legend-dot orange"></i>Pozitif sapma</span><span><i class="legend-line"></i>Ağ içi etki</span><span><i class="legend-line dashed"></i>Algı geri beslemesi</span></div>
+        <p id="nodeInfo" class="node-info">Bir düğüme dokunarak işlevini görün. Ok işaretleri modeldeki etki yönünü gösterir; doğrulanmış anatomik bağlantılar değildir.</p>
+        <div class="transport">
+          <button id="playButton" class="button primary"><span aria-hidden="true">▶</span> Başlat</button>
+          <button id="resetButton" class="button">Sıfırla</button>
+          <label class="speed-label" for="speed">Hız <select id="speed"><option value="2">1×</option><option value="6" selected>3×</option><option value="20">10×</option></select></label>
+          <div class="time-readout"><span id="timeValue">0.0</span><small>/ <span id="durationValue">100</span> zaman birimi</small></div>
+        </div>
+        <div class="time-track" aria-hidden="true"><div id="timeProgress"></div></div>
+      </article>
+
+      <div class="outputs-heading"><div><p class="eyebrow">EŞLEŞTİRİLMİŞ KARŞILAŞTIRMA</p><h2>Nötr eşe göre ne değişti?</h2></div><span class="delta-key">Δ = seçili − nötr</span></div>
+      <div id="metrics" class="metrics" aria-live="off"></div>
+
+      <div class="charts-grid">
+        <article class="card chart-card"><div class="chart-title"><h3>Algılanan belirti</h3><span>Negatif Δ: daha az belirti</span></div><svg id="chartSymptom" role="img" aria-label="Algılanan belirti, seçili ve nötr zaman serileri"></svg><div class="chart-legend"><span><i class="legend-line teal-line"></i>Seçili</span><span><i class="legend-line teal-line dashed"></i>Nötr</span></div></article>
+        <article class="card chart-card"><div class="chart-title"><h3>Düzenleyici yollar</h3><span>Farklı zaman ölçekleri</span></div><svg id="chartRegulation" role="img" aria-label="Otonom ve endokrin durumlar, seçili ve nötr zaman serileri"></svg><div class="chart-legend"><span><i class="legend-line teal-line"></i>Otonom</span><span><i class="legend-line orange-line"></i>Endokrin</span><span>Kesik: nötr</span></div></article>
+        <article class="card chart-card"><div class="chart-title"><h3>Periferik sapmalar</h3><span>Sağlık puanı değildir</span></div><svg id="chartPeripheral" role="img" aria-label="Kardiyovasküler ve immün eksen sapmaları, seçili ve nötr zaman serileri"></svg><div class="chart-legend"><span><i class="legend-line teal-line"></i>Kardiyovasküler</span><span><i class="legend-line orange-line"></i>İmmün</span><span>Kesik: nötr</span></div></article>
+        <article class="card chart-card"><div class="chart-title"><h3>Hastalık süreci</h3><span>İki kolda aynı denklem</span></div><svg id="chartDisease" role="img" aria-label="Bağlamdan bağımsız hastalık süreci; iki kol örtüşür"></svg><div class="chart-legend"><span><i class="legend-line teal-line"></i>Seçili</span><span><i class="legend-line orange-line dashed"></i>Nötr · örtüşür</span></div></article>
+      </div>
+      <p class="chart-footnote">Grafikler durumların kendisini, kartlar aynı andaki karşılaştırma farkını gösterir. Eksenler bağımsız ölçeklenir. Hastalık eğrisindeki doğal düşüş plasebo etkisi değildir.</p>
+    </section>
+  </div>
+
+  <section class="learning-layout" aria-label="Öğrenme ve keşif görevleri">
+    <article class="card learning-card">
+      <div class="section-heading"><div><p class="eyebrow">ÖĞRENME OYUNU</p><h2>Deneyim, bir sonraki denemeyi yazar.</h2></div><span class="small-tag">02</span></div>
+      <p class="body-copy">Bir eğitim sonucu seçin. Ağ bir denemeyi mevcut ℓ ile tamamlar; öğrenilmiş ilişki <strong>deneme bittikten sonra</strong> güncellenir.</p>
+      <div class="learning-equation">ℓ<sub>sonraki</sub> = ℓ<sub>şimdi</sub> + α (sonuç − ℓ<sub>şimdi</sub>)</div>
+      <div class="learning-buttons"><button id="trainRelief" class="button soft-teal">−1 · Rahatlama</button><button id="trainThreat" class="button soft-orange">+1 · Tehdit</button><button id="trainNeutral" class="button">0 · Nötr / sönme</button></div>
+      <p id="learningStatus" class="learning-status" role="status">Hazır. Eğitim sonuçları varsayımsaldır; gözlenmiş hasta verileri değildir.</p>
+      <div id="learningHistory" class="learning-history"><span class="empty-state">İlk deneyiminiz burada görünecek.</span></div>
+      <button id="clearLearning" class="text-button">Öğrenme kaydını ve ℓ değerini temizle</button>
+    </article>
+
+    <article class="card missions-card">
+      <div class="section-heading"><div><p class="eyebrow">KEŞİF GÖREVLERİ</p><h2>Dört küçük deney</h2></div><span id="missionCount" class="small-tag">0 / 4</span></div>
+      <ol id="missions" class="missions"></ol>
+      <p class="micro">Görevler bu örnek modelin davranışlarını gösterir. Görev tamamlamak kuramı deneysel olarak doğrulamaz.</p>
+    </article>
+  </section>
+
+  <section class="equations-section" aria-label="Basit açıklama denklemleri">
+    <div class="outputs-heading"><div><p class="eyebrow">ÜÇ FİKİRDE KURAM</p><h2>Denklemler ne söylüyor?</h2></div></div>
+    <div class="equation-grid">
+      <article class="card equation-card"><span class="equation-index">01 / ÖĞRENME</span><div class="equation">yeni = eski + α × hata</div><h3>Beklenti, deneyimle güncellenir.</h3><p>Öğrenilmiş tahmin ℓ, yaşanan sonuçla arasındaki farkın bir bölümünü alır. α arttıkça tek bir deneyimin izi büyür.</p><a href="https://doi.org/10.1523/JNEUROSCI.19-01-00484.1999" target="_blank" rel="noopener">İlgili mekanizma kanıtı ↗</a></article>
+      <article class="card equation-card"><span class="equation-index">02 / ÇIKARIM</span><div class="equation">algı = w × öncül + (1−w) × duyum</div><h3>Algı, birden fazla girdiyi birleştirir.</h3><p>Öncül = E + 0.6ℓ. Duyusal girdi ağ geri beslemesini ve hastalık katkısını içerir. w, bu modelde öncüle verilen ağırlıktır.</p><a href="https://doi.org/10.1001/jamaneurol.2018.2017" target="_blank" rel="noopener">Algı–biyobelirteç ayrışması ↗</a></article>
+      <article class="card equation-card"><span class="equation-index">03 / AĞ AKTARIMI</span><div class="equation">Δçıktı ≈ doğrudan + ağ aktarımı</div><h3>Bir yol kapansa da diğerleri kalabilir.</h3><p>Bu yerel, küçük değişim yaklaşımıdır. Tam simülasyon doygunluk, işaret, geri besleme ve farklı zaman sabitleri içerir.</p><a href="https://doi.org/10.1016/j.neuron.2026.03.025" target="_blank" rel="noopener">Farelerde yola özgü nedensel kanıt ↗</a></article>
+    </div>
+  </section>
+
+  <section class="export-bar card" aria-label="Deney verilerini dışa aktar">
+    <div><p class="eyebrow">TEKRARLANABİLİR KEŞİF</p><h2>Deneyinizi yanınıza alın.</h2><p>CSV: iki kolun tüm durumları, çıktıları ve farkları. JSON: ayarlar ve öğrenme kaydı.</p></div>
+    <div class="export-actions"><button id="exportCsv" class="button">↓ Veri CSV</button><button id="exportJson" class="button">↓ Senaryo JSON</button><button id="importJson" class="button">↑ JSON yükle</button><input id="fileInput" type="file" accept=".json,application/json" hidden></div>
+  </section>
+  <p id="fileStatus" class="file-status" role="status"></p>
+</main>
+
+<footer><span>PLASEBO AĞ LABORATUVARI · CET-N</span><span>Hesaplama tarayıcıda · İndirilince çevrimdışı</span><a href="README.md">Proje dosyaları ↗</a></footer>
+
+<dialog id="guideDialog">
+  <div class="dialog-heading"><p class="eyebrow">LABORATUVAR KILAVUZU</p><button id="closeGuide" class="button quiet" aria-label="Kılavuzu kapat">✕</button></div>
+  <h2>Önce bir soru seçin.</h2>
+  <ol class="guide-steps"><li><strong>Hazır deneyle başlayın.</strong> “Olumlu beklenti” seçin ve Başlat'a basın. Eksi değerler rahatlama yönüdür.</li><li><strong>Tek bir ayarı değiştirin.</strong> Örneğin opioid kapısını sıfırlayın. Algıdaki değişimin tamamı yok oluyor mu?</li><li><strong>Farkı okuyun.</strong> Δ kartları seçili koşulu nötr eşle karşılaştırır. Hastalık süreci iki kolda aynıdır.</li><li><strong>Öğrenmeyi deneyin.</strong> Rahatlama eğitimi verin; sonra E'yi sıfırlayıp ℓ'nin bıraktığı izi görün. Nötr sonuçlar bu izi söndürür.</li></ol>
+  <p>Bu modelin düğümleri işlevsel değişkenlerdir. Opioid kapısı bir ilacın dozu değildir. Periferik eksenlerde “azalma” otomatik olarak iyileşme anlamına gelmez. Seçili kapılar belirli aktarım katsayılarını kapatır; tüm organizmayı temsil etmez.</p>
+  <button id="guideStart" class="button primary">Laboratuvara dön</button>
+</dialog>
+<noscript>Bu çevrimdışı simülasyon için tarayıcınızda JavaScript'i etkinleştirin.</noscript>
+</body>
+</html>
+
